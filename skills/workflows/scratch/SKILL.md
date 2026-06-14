@@ -5,13 +5,7 @@ description: Scratch workspace workflow for greenfield experiments, reports, dem
 
 # Scratch
 
-Apply these conventions to the current scratch project.
-
-## Workspace
-
-This is scratch work where we try stuff out.
-
-For each thing we try out, create a directory of its own. If you are in the scratch root and the user did not specify a directory, pick a short kebab-case name from the task and create that directory before adding files.
+Apply these conventions to the current scratch project. This is scratch work where we try stuff out.
 
 Most work is greenfield. While iterating or prototyping, do not worry about backwards compatibility unless there is a concrete reason.
 
