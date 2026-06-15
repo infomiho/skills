@@ -9,9 +9,11 @@ Apply these conventions to the current scratch project. This is scratch work whe
 
 ## Process
 
-1. Do not jump straight to the solution. Think through problems step by step, using an appropriate product, UX, architecture, or data-model framework - while documenting it.
+1. Do not jump straight to the solution. Think through problems step by step, using an appropriate product, UX, architecture, or data-model framework. Present it to the user and ask for confirmation.
 
 2. Do the same for the UX flow of apps, demos, and reports.
+
+4. Do the implementation.
 
 3. After something is implemented, prefer using the `/review` skill, ideally in a subagent so the main agent is not biased.
 
