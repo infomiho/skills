@@ -1,0 +1,8 @@
+{
+  "name": "infomiho-skills",
+  "skills": [
+    "./skills/engineering/review",
+    "./skills/productivity/create-presentation",
+    "./skills/workflows/scratch"
+  ]
+}

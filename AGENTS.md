@@ -10,6 +10,8 @@ Keep `description` specific. It should explain what the skill does and when to u
 
 Keep `SKILL.md` concise. Put detailed guidance in nearby reference files and link to them from the skill.
 
+Promoted skills must be listed in `.claude-plugin/plugin.json`; `npx skills` uses that manifest name to group installed skills instead of showing them under `General`.
+
 Validate discovery before committing:
 
 ```bash
