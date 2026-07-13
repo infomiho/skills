@@ -5,54 +5,52 @@ description: Scratch workspace workflow for greenfield experiments, reports, dem
 
 # Scratch
 
-Apply these conventions to the current scratch project.
-
 ## Process
 
-1. MUST: work on problems step by step, using an appropriate product, UX, architecture, or data-model framework. Search the web for thinking frameworks.
+1. MUST: work step by step with an appropriate product, UX, architecture, or data-model framework. Search the web for thinking frameworks.
 
-2. MUST: present the plan to the user and iterate on it. Stop to ask user for feedback.
+2. MUST: present the plan, pause for user feedback, iterate, then implement it.
 
-3. MUST: implement it.
-
-4. NICE TO HAVE: use the `/review` skill, ideally in a subagent so the main agent is not biased.
+3. NICE TO HAVE: run `/review`, preferably in a subagent.
 
 ## Rules of thumb
 
-Most work is greenfield. While iterating or prototyping, do not worry about backwards compatibility unless there is a concrete reason.
+Ignore backwards compatibility while iterating or prototyping unless there is a concrete reason not to.
 
-Prefer 80/20 implementation and fixes. Do not complicate things too early.
+Prefer 80/20 implementations and fixes.
 
-Sometimes zoom out and think about the system as a whole. Prefer a better system-level solution over adding more glue code.
+Avoid premature complexity.
+
+Zoom out when needed; prefer system-level solutions over adding glue code.
 
 ## Language
 
 Use concise, down-to-earth technical language that is still approachable.
 
-Avoid salesy language. Most work here is not built to sell.
+Avoid salesy language.
 
 ## Style
 
-Unless told otherwise use: minimal technical engineering, black and white, with Majorelle blue accents.
+Default to a minimal, technical, black-and-white aesthetic with Majorelle blue accents.
 
-UI should be based on UX needs, not just a design aesthetic.
+Base UI decisions on UX needs.
 
 ## Stacks
 
-For reports, raw HTML with modern CSS is often a good fit. See [references/raw-html-reports.md](references/raw-html-reports.md).
+For reports, consider raw HTML with modern CSS. See [references/raw-html-reports.md](references/raw-html-reports.md).
 
-For UI-heavy prototypes, consider static Vite + Preact with pre-rendering because JSX makes component breakdown efficient. See [references/static-vite-preact.md](references/static-vite-preact.md).
+For UI-heavy prototypes, consider static Vite + Preact with pre-rendering. See [references/static-vite-preact.md](references/static-vite-preact.md).
 
 For simple backend + frontend services, consider TanStack Start. See [references/tanstack-start.md](references/tanstack-start.md).
 
-For throwaway persistence, SQLite is fine. For production persistence, Postgres is the default alternative, but SQLite can also work in production if mounted properly.
+SQLite is acceptable for throwaway persistence. For production, default to Postgres; SQLite is also acceptable when mounted properly.
 
-Syntax highlighting is usually done with Shiki.
+Prefer Shiki for syntax highlighting.
 
 ## Deployment
 
-When it comes time to share the artifact, follow [references/deployment.md](references/deployment.md).
+To share the artifact, follow [references/deployment.md](references/deployment.md).
 
 ## Graduating
 
-Some things may graduate from scratch to `~/dev` and get a new Git repo. Use the `infomiho` org for personal projects and the `wasp-lang` org for Wasp-related projects.
+When moving a scratch project to `~/dev`, create a Git repo under `infomiho` for personal projects or `wasp-lang` for Wasp-related projects.

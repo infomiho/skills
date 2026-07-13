@@ -48,16 +48,6 @@ Check when relevant:
 
 ## Findings
 
-Each finding must include:
-
-- Location: URL, route, file, component, screen, element, interaction, or state
-- Heuristic or UX principle
-- User impact
-- Concrete fix
-- Severity
-
-Rules:
-
 - Order findings by severity.
 - Ground findings in observed behavior or code.
 - Separate usability issues from visual taste.
@@ -78,8 +68,8 @@ Rules:
 ## Findings
 
 1. [Severity] Short finding title
-Location: URL/route/file/component/screen/element
-Heuristic: # and name
+Location: URL/route/file/component/screen/element/interaction/state
+Heuristic: # and name, or UX principle
 Problem: what users experience
 Impact: why it matters
 Fix: concrete change

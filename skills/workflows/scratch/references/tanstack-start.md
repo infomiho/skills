@@ -1,6 +1,6 @@
 # TanStack Start
 
-Use TanStack Start for simple backend + frontend services where a full-stack React app is a good fit.
+Use TanStack Start for simple backend + frontend React services.
 
 Default scaffold:
 

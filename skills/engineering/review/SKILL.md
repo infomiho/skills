@@ -8,19 +8,17 @@ user-invocable: true
 
 # Code Review
 
-Review the code changes and provide actionable feedback.
-
 ## What to review
 
 If a PR number is provided, fetch it with `gh pr diff $ARGUMENTS`. Otherwise, review the staged/unstaged diff with `git diff` or read the specified files.
 
 ## Review focus
 
-1. Clean Code the naming
-2. DRY up the code
-3. Look into Effective TypeScript issues
-4. Remove AI slop comments if any
-5. If it's a shell script, use `shellcheck`
+1. Clean up naming using Clean Code principles.
+2. DRY up the code.
+3. Check for Effective TypeScript issues.
+4. Remove AI slop comments.
+5. Run `shellcheck` on shell scripts.
 
 ## Output format
 

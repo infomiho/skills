@@ -1,8 +1,8 @@
 # Raw HTML Reports
 
-Use raw HTML for reports when the output should be static, easy to deploy, and easy to inspect.
+Use raw HTML for reports intended to be static, easy to deploy, and easy to inspect.
 
-Prefer modern CSS where it keeps the file smaller and clearer:
+Prefer modern CSS when it reduces file size or improves clarity:
 
 - custom properties
 - cascade layers
@@ -12,4 +12,4 @@ Prefer modern CSS where it keeps the file smaller and clearer:
 - modern color functions like `color-mix()`
 - `:has()` for state and structure selectors
 
-Keep the report self-contained unless assets or generated data make that awkward.
+Keep reports self-contained unless assets or generated data make that awkward.
