@@ -20,7 +20,7 @@ If a PR number is provided, fetch it with `gh pr diff $ARGUMENTS`. Otherwise, re
 2. DRY up the code
 3. Look into Effective TypeScript issues
 4. Remove AI slop comments if any
-5. If it's a shell script, use `shellcheck` for extra info
+5. If it's a shell script, use `shellcheck`
 
 ## Output format
 

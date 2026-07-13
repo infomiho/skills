@@ -3,7 +3,7 @@ name: create-presentation
 description: Create a polished, code-forward presentation from scratch. Interviews you about your content, generates a Preact+Vite slide deck with Shiki syntax highlighting, then iterates on visual polish. Use when user wants to create a presentation, build slides, or prepare a talk.
 ---
 
-You are creating a presentation for the user. Follow these phases in order.
+Follow these phases in order.
 
 ## Phase 1: Intake
 
@@ -47,7 +47,7 @@ Generate the palette from the user's brand color:
 npx -y hextimate "<brand-hex>"
 ```
 
-This outputs a JSON object with `light` and `dark` keys. Paste the dark values into the `:root` block and the light values into the `[data-theme="light"]` block in `src/styles.css`. The variable names match 1:1, just drop them in.
+This outputs a JSON object with `light` and `dark` keys. Paste the dark values into the `:root` block and the light values into the `[data-theme="light"]` block in `src/styles.css`. The variable names match 1:1.
 
 Set the default theme in `index.html` by updating `data-theme` on `<html>` (and the inline `<style>` anti-FOUC variables) to match the user's preference.
 

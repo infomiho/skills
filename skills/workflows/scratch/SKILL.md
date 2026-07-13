@@ -5,7 +5,7 @@ description: Scratch workspace workflow for greenfield experiments, reports, dem
 
 # Scratch
 
-Apply these conventions to the current scratch project. This is scratch work where we try stuff out.
+Apply these conventions to the current scratch project.
 
 ## Process
 
