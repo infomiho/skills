@@ -2,6 +2,7 @@
   "name": "infomiho-skills",
   "skills": [
     "./skills/engineering/review",
+    "./skills/productivity/bro",
     "./skills/productivity/create-presentation",
     "./skills/productivity/ux-review",
     "./skills/workflows/scratch"

@@ -16,6 +16,7 @@ npx skills add infomiho/skills --skill scratch
 
 ## Skills
 
+- `bro` - Restate the last message simply, clearly, and without jargon. [Source](https://x.com/dillon_mulroy/status/2079257150824620312)
 - `create-presentation` - Create a Preact + Vite + Shiki slide deck from an interview-driven outline.
 - `review` - Review code changes for correctness, clarity, and potential issues.
 - `scratch` - Work in scratch/prototype directories with the usual stack, process, and deployment preferences.
