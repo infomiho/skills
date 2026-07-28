@@ -1,6 +1,6 @@
 ---
 name: source-to-article
-description: Manual-only workflow that converts supplied chapters, excerpts, notes, PDFs, local files, or links into a grounded, readable, self-contained HTML article. Use only when the user explicitly invokes source-to-article.
+description: Manual-only workflow that converts supplied chapters, excerpts, notes, PDFs, local files, or links into a grounded, concise, self-contained HTML article. Use only when the user explicitly invokes source-to-article.
 disable-model-invocation: true
 ---
 
@@ -32,7 +32,7 @@ Ask one concise set of questions for missing audience, voice, scope, purpose, or
 - Preserve the author's terminology, argument, examples, qualifications, and conclusions.
 - Distinguish the author's claims from neutral explanation.
 - Do not add opinions, generic advice, invented metaphors, or unrelated examples.
-- Paraphrase rather than reproduce long passages. Keep quotations short and attribute them.
+- Paraphrase rather than reproduce long passages. Keep quotations short and attribute them. Preserve primary evidence such as logs when exact wording matters.
 - State uncertainty rather than guessing.
 - Treat code as evidence of how something works, not why it was designed that way. If purpose or motivation is not documented, ask the user and treat their answer as source material.
 
@@ -56,6 +56,16 @@ Follow the source's logical order:
 7. Connect the selected sections' conclusions without inventing a new one.
 
 Match the agreed voice. Use short paragraphs and concrete explanations. Explain unfamiliar terms on first use. Make every sentence add information; remove throat-clearing, redundant summaries, and repetitive comma-list rhythms. Name the relevant chapter or section beneath each heading. Identify the title, author, edition, and covered sections in the footer.
+
+## Writing Style
+
+- Write directly and factually. State the conclusion early when the source supports one.
+- Use plain words while preserving exact terminology, identifiers, versions, flags, error names, commands, and measurements.
+- Prefer measured facts to adjectives and concrete observations to interpretation.
+- Avoid storytelling, suspense, metaphors, dramatic language, and clever headings.
+- Keep investigation details and dead ends only when they help the reader verify the conclusion.
+- Make actions specific. Include exact commands or flags when the source provides them.
+- Choose paragraphs, bullets, tables, or excerpts according to which presents the facts most clearly.
 
 ## Code and Visuals
 
@@ -93,10 +103,11 @@ Before finishing:
 
 1. Check every claim and example against the source map.
 2. Remove unsupported interpretation, off-topic material, repetition, filler, and code that does not earn its space.
-3. When needed for the audience, confirm the opening defines the main concept. Show or clearly describe every important concrete reference.
-4. Confirm all chapter, section, quotation, example, and visual references.
-5. Open the page and inspect representative desktop and mobile viewports.
-6. Check print styles, horizontal overflow, broken assets, and console errors.
-7. Keep the working setup while iterating. Remove temporary generators, dependencies, and assets after final verification.
+3. Confirm the writing is direct, factual, and free of narrative embellishment.
+4. When needed for the audience, confirm the opening defines the main concept. Show or clearly describe every important concrete reference.
+5. Confirm all chapter, section, quotation, example, and visual references.
+6. Open the page and inspect representative desktop and mobile viewports.
+7. Check print styles, horizontal overflow, broken assets, and console errors.
+8. Keep the working setup while iterating. Remove temporary generators, dependencies, and assets after final verification.
 
 Report the output path, included chapters or sections, included examples and visuals, and source limitations.
