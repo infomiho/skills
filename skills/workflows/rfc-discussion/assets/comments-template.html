@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RFC comment threads</title>
+<style>
+  :root {
+    --font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --color-bg: #faf9f7;
+    --color-surface: #ffffff;
+    --color-text: #1f2328;
+    --color-muted: #6b7280;
+    --color-border: #e5e2dc;
+    --color-accent: #b45309;
+    --color-accent-soft: #fef3e2;
+    --color-guide: #d6d3cd;
+    --color-answer-bg: #f4faf4;
+    --color-answer-border: #bbd8bb;
+    --color-answer: #15803d;
+    --color-code-bg: color-mix(in oklab, var(--color-text) 10%, transparent);
+    --radius: 8px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-bg: #16181c;
+      --color-surface: #1e2126;
+      --color-text: #e6e4e0;
+      --color-muted: #9aa0a8;
+      --color-border: #32363d;
+      --color-accent: #f0a35e;
+      --color-accent-soft: #2c2318;
+      --color-guide: #3c4048;
+      --color-answer-bg: #1b241c;
+      --color-answer-border: #2f4a30;
+      --color-answer: #4ade80;
+    }
+  }
+  body {
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    line-height: 1.55;
+  }
+  main {
+    max-width: 62rem;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 6rem;
+  }
+  header { display: flex; align-items: baseline; gap: 1rem; }
+  h1 { font-size: 1.5rem; margin: 0 0 0.25rem; flex: 1; }
+  .subtitle { color: var(--color-muted); margin: 0 0 1rem; font-size: 0.9rem; }
+  #export {
+    font: inherit;
+    font-size: 0.8rem;
+    color: var(--color-answer);
+    background: none;
+    border: 1px solid var(--color-answer-border);
+    border-radius: var(--radius);
+    padding: 0.3rem 0.8rem;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  #export:hover { background: var(--color-answer-bg); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1 id="page-title"></h1>
+    <button id="export">Export answers</button>
+  </header>
+  <p class="subtitle" id="page-subtitle"></p>
+  <rfc-comment-tree></rfc-comment-tree>
+</main>
+
+<!-- ============================================================ DATA
+  Replace the JSON below per RFC. Contract:
+  {
+    "title":         string,   page heading
+    "subtitle":      string,   one line under the heading
+    "storagePrefix": string,   unique per RFC, e.g. "rfc-single-server"
+    "threads": [{
+      "section": string,       threads with the same consecutive section share a heading
+      "source":  string,       the anchor text / block the discussion is on
+      "items": [{
+        "author": string,
+        "date":   string,
+        "part":   string?,     e.g. "point 2 of 4" when a long comment is chunked
+        "text":   string,      rendered as Markdown (line breaks preserved)
+        "answer": { "key": string, "proposed": string }?   per-chunk answer box
+      }],
+      "answer": { "key": string, "proposed": string }?     thread-level answer box
+    }]
+  }
+  Keys are localStorage identity: stable slugs (from discussion ids), never
+  positional. Same key across regenerations = user's edit survives; the new
+  proposal is reachable via "reset to proposed".
+============================================================ -->
+<script id="thread-data" type="application/json">
+{
+  "title": "Example RFC — comment threads",
+  "subtitle": "Sample data. Replace the #thread-data JSON block to generate a real page.",
+  "storagePrefix": "rfc-example",
+  "threads": [
+    {
+      "section": "Example section",
+      "source": "“the sentence the discussion is anchored on”",
+      "items": [
+        { "author": "Reviewer One", "date": "Jan 1",
+          "text": "A comment with **Markdown**, a `code span`, and\n> a quote." },
+        { "author": "Reviewer Two", "date": "Jan 2", "part": "point 1 of 2",
+          "text": "1. First point of a long comment.",
+          "answer": { "key": "example-point-1", "proposed": "Per-chunk proposed answer with a [link](https://example.com)." } },
+        { "author": "Reviewer Two", "date": "Jan 2", "part": "point 2 of 2",
+          "text": "2. Second point.",
+          "answer": { "key": "example-point-2", "proposed": "" } }
+      ],
+      "answer": { "key": "example-thread", "proposed": "Thread-level proposed answer." }
+    }
+  ]
+}
+</script>
+
+<script type="module">
+import { LitElement, html, css, nothing } from "https://esm.sh/lit@3";
+import { unsafeHTML } from "https://esm.sh/lit@3/directives/unsafe-html.js";
+import { marked } from "https://esm.sh/marked@15";
+
+const DATA = JSON.parse(document.getElementById("thread-data").textContent);
+const PREFIX = DATA.storagePrefix + ":";
+
+document.title = DATA.title;
+document.getElementById("page-title").textContent = DATA.title;
+document.getElementById("page-subtitle").textContent = DATA.subtitle;
+
+/* Registry of every answer box, for export. */
+const ANSWERS = [];
+for (const thread of DATA.threads) {
+  for (const item of thread.items) if (item.answer) ANSWERS.push(item.answer);
+  if (thread.answer) ANSWERS.push(thread.answer);
+}
+
+document.getElementById("export").addEventListener("click", async (event) => {
+  const out = {};
+  for (const { key, proposed } of ANSWERS) {
+    const stored = localStorage.getItem(PREFIX + key);
+    out[key] = { text: stored ?? proposed ?? "", edited: stored !== null };
+  }
+  await navigator.clipboard.writeText(JSON.stringify(out, null, 2));
+  const button = event.target;
+  button.textContent = "Copied ✓";
+  setTimeout(() => (button.textContent = "Export answers"), 1500);
+});
+
+/* ---------------------------------------------------------- components */
+
+class AnswerBox extends LitElement {
+  static properties = {
+    storageKey: { type: String },
+    proposed: { type: String },
+    _value: { state: true },
+    _status: { state: true },
+    _mode: { state: true },
+  };
+
+  constructor() {
+    super();
+    this._mode = "preview";
+  }
+
+  static styles = css`
+    :host { display: block; }
+    .head {
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+      font-size: 0.8rem;
+      margin-bottom: 0.35rem;
+    }
+    .label { font-weight: 600; color: var(--color-answer); }
+    .edited-dot {
+      width: 0.45rem; height: 0.45rem;
+      border-radius: 50%;
+      background: var(--color-accent);
+      align-self: center;
+    }
+    .status { color: var(--color-muted); font-size: 0.75rem; }
+    .status.saved { color: var(--color-answer); }
+    .toggle, .reset {
+      font: inherit;
+      font-size: 0.75rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+    }
+    .toggle { color: var(--color-answer); }
+    .reset { margin-left: auto; color: var(--color-muted); }
+    .reset:hover { color: var(--color-text); }
+    .preview {
+      min-height: 1.5rem;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      background: var(--color-answer-bg);
+      border: 1px solid var(--color-answer-border);
+      border-radius: var(--radius);
+      padding: 0.6rem 0.75rem;
+      cursor: pointer;
+    }
+    .preview:hover { outline: 1px solid var(--color-answer); outline-offset: -1px; }
+    .preview > *:first-child { margin-top: 0; }
+    .preview > *:last-child { margin-bottom: 0; }
+    .preview a { color: var(--color-answer); cursor: pointer; overflow-wrap: anywhere; }
+    .preview code {
+      font-size: 0.85em;
+      background: var(--color-code-bg);
+      border-radius: 4px;
+      padding: 0.05em 0.3em;
+    }
+    .preview ul, .preview ol { padding-left: 1.3rem; }
+    .placeholder { color: var(--color-muted); }
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 3rem;
+      field-sizing: content;
+      resize: vertical;
+      font: inherit;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      color: var(--color-text);
+      background: var(--color-answer-bg);
+      border: 1px solid var(--color-answer-border);
+      border-radius: var(--radius);
+      padding: 0.6rem 0.75rem;
+    }
+    textarea:focus { outline: 2px solid var(--color-answer); outline-offset: -1px; }
+  `;
+
+  #saveTimer;
+
+  get #lsKey() {
+    return PREFIX + this.storageKey;
+  }
+
+  render() {
+    const stored = localStorage.getItem(this.#lsKey);
+    const value = this._value ?? stored ?? this.proposed ?? "";
+    const edited = (this._value ?? stored) !== null && value !== (this.proposed ?? "");
+    return html`
+      <div class="head">
+        <span class="label">Proposed answer</span>
+        ${edited ? html`<span class="edited-dot" title="Edited"></span>` : nothing}
+        <span class="status ${this._status === "saved" ? "saved" : ""}">${this._status ?? ""}</span>
+        <button class="toggle" @click=${this.#toggleMode}>
+          ${this._mode === "edit" ? "preview" : "edit"}
+        </button>
+        <button class="reset" @click=${this.#reset}>reset to proposed</button>
+      </div>
+      ${this._mode === "edit"
+        ? html`<textarea
+            .value=${value}
+            placeholder="No answer yet. Write one, it saves automatically."
+            @input=${this.#onInput}
+          ></textarea>`
+        : html`<div class="preview" title="Click to edit" @click=${this.#onPreviewClick}>
+            ${value.trim()
+              ? unsafeHTML(marked.parse(value))
+              : html`<span class="placeholder">No answer proposed. Click to write one.</span>`}
+          </div>`}
+    `;
+  }
+
+  #toggleMode() {
+    this._mode = this._mode === "edit" ? "preview" : "edit";
+  }
+
+  async #onPreviewClick(event) {
+    if (event.target.closest("a")) return;
+    this._mode = "edit";
+    await this.updateComplete;
+    this.renderRoot.querySelector("textarea")?.focus();
+  }
+
+  #onInput(event) {
+    this._value = event.target.value;
+    this._status = "saving…";
+    clearTimeout(this.#saveTimer);
+    this.#saveTimer = setTimeout(() => {
+      localStorage.setItem(this.#lsKey, this._value);
+      this._status = "saved";
+    }, 400);
+  }
+
+  #reset() {
+    clearTimeout(this.#saveTimer);
+    localStorage.removeItem(this.#lsKey);
+    this._value = null;
+    this._status = "reset";
+  }
+}
+customElements.define("answer-box", AnswerBox);
+
+class CommentItem extends LitElement {
+  static properties = { comment: { type: Object } };
+
+  static styles = css`
+    :host { display: block; padding: 0.4rem 0 0.2rem; }
+    .head { font-size: 0.85rem; margin-bottom: 0.15rem; }
+    .author { font-weight: 600; }
+    .date { color: var(--color-muted); margin-left: 0.5rem; font-size: 0.8rem; }
+    .part {
+      color: var(--color-accent);
+      background: var(--color-accent-soft);
+      border-radius: 4px;
+      padding: 0.05rem 0.4rem;
+      margin-left: 0.5rem;
+      font-size: 0.72rem;
+    }
+    .body { font-size: 0.92rem; }
+    .body > *:first-child { margin-top: 0; }
+    .body > *:last-child { margin-bottom: 0; }
+    .body blockquote {
+      margin: 0.4rem 0;
+      padding: 0.1rem 0 0.1rem 0.75rem;
+      border-left: 3px solid var(--color-guide);
+      color: var(--color-muted);
+    }
+    .body blockquote > :first-child { margin-top: 0; }
+    .body blockquote > :last-child { margin-bottom: 0; }
+    .body a { color: var(--color-accent); overflow-wrap: anywhere; }
+    .body code {
+      font-size: 0.85em;
+      background: var(--color-code-bg);
+      border-radius: 4px;
+      padding: 0.05em 0.3em;
+    }
+    .body ul, .body ol { margin: 0.4rem 0; padding-left: 1.3rem; }
+  `;
+
+  render() {
+    const { author, date, part, text } = this.comment;
+    return html`
+      <div class="head">
+        <span class="author">${author}</span>
+        <span class="date">${date}</span>
+        ${part ? html`<span class="part">${part}</span>` : nothing}
+      </div>
+      <div class="body">${unsafeHTML(marked.parse(text, { breaks: true }))}</div>
+    `;
+  }
+}
+customElements.define("comment-item", CommentItem);
+
+class CommentThread extends LitElement {
+  static properties = { thread: { type: Object } };
+
+  static styles = css`
+    :host {
+      display: block;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .source { font-size: 0.95rem; margin-bottom: 0.75rem; }
+    .source-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-accent);
+      background: var(--color-accent-soft);
+      border-radius: 4px;
+      padding: 0.1rem 0.4rem;
+      margin-right: 0.5rem;
+      vertical-align: 1px;
+    }
+    .source q { font-style: italic; }
+    .tree {
+      margin-left: 0.5rem;
+      padding-left: 1.1rem;
+      border-left: 2px solid var(--color-guide);
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .node { position: relative; }
+    .node::before {
+      content: "";
+      position: absolute;
+      left: -1.1rem;
+      top: 1.05rem;
+      width: 0.7rem;
+      border-top: 2px solid var(--color-guide);
+    }
+    .nested {
+      margin-left: 1rem;
+      padding: 0.3rem 0 0.3rem 1.1rem;
+      border-left: 2px solid var(--color-answer-border);
+    }
+  `;
+
+  render() {
+    const { source, items, answer } = this.thread;
+    return html`
+      <div class="source">
+        <span class="source-label">source</span>
+        <q>${source}</q>
+      </div>
+      <div class="tree">
+        ${items.map(
+          (item) => html`
+            <div class="node">
+              <comment-item .comment=${item}></comment-item>
+              ${item.answer
+                ? html`<div class="nested">
+                    <answer-box
+                      .storageKey=${item.answer.key}
+                      .proposed=${item.answer.proposed}
+                    ></answer-box>
+                  </div>`
+                : nothing}
+            </div>
+          `,
+        )}
+        ${answer
+          ? html`<div class="node">
+              <answer-box .storageKey=${answer.key} .proposed=${answer.proposed}></answer-box>
+            </div>`
+          : nothing}
+      </div>
+    `;
+  }
+}
+customElements.define("comment-thread", CommentThread);
+
+class RfcCommentTree extends LitElement {
+  static styles = css`
+    h2 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-muted);
+      margin: 3rem 0 1rem;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 0.4rem;
+    }
+    h2:first-of-type { margin-top: 1.5rem; }
+  `;
+
+  render() {
+    let currentSection = null;
+    return DATA.threads.map((thread) => {
+      const heading =
+        thread.section !== currentSection ? html`<h2>${thread.section}</h2>` : nothing;
+      currentSection = thread.section;
+      return html`${heading}<comment-thread .thread=${thread}></comment-thread>`;
+    });
+  }
+}
+customElements.define("rfc-comment-tree", RfcCommentTree);
+</script>
+</body>
+</html>
