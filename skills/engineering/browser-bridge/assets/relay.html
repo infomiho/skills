@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Browser bridge</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --surface: light-dark(#ffffff, #191919);
+        --text: light-dark(#202020, #eeeeee);
+        --muted: light-dark(#626262, #b5b5b5);
+        --border: light-dark(#dedede, #444444);
+        --accent: light-dark(#176b43, #8cddb2);
+        --font: system-ui, sans-serif;
+        --radius: 8px;
+        font-family: var(--font);
+        color: var(--text);
+        background: var(--surface);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 24px;
+      }
+      main {
+        max-inline-size: 32rem;
+        margin-inline: auto;
+      }
+      h1 {
+        font-size: 1rem;
+        margin: 0 0 24px;
+      }
+      h2 {
+        font-size: 1.4rem;
+        line-height: 1.25;
+        margin: 0 0 8px;
+      }
+      p {
+        font-size: 0.875rem;
+        line-height: 1.5;
+        margin: 0;
+        color: var(--muted);
+      }
+      #tab {
+        border-block: 1px solid var(--border);
+        padding-block: 12px;
+        margin-block: 20px;
+      }
+      #tab-title {
+        display: block;
+        font-size: 0.875rem;
+        overflow-wrap: anywhere;
+      }
+      #tab-origin {
+        overflow-wrap: anywhere;
+      }
+      #actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-block-start: 20px;
+      }
+      button {
+        min-block-size: 44px;
+        padding: 10px 14px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+        color: var(--text);
+        font: inherit;
+        font-size: 0.875rem;
+        cursor: pointer;
+      }
+      button:hover {
+        border-color: var(--text);
+      }
+      button:focus-visible {
+        outline: 2px solid var(--text);
+        outline-offset: 3px;
+      }
+      [data-state="connected"] h2 {
+        color: var(--accent);
+      }
+      [hidden] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Browser bridge</h1>
+      <section
+        id="connection"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        <h2 id="status">Connecting to your tab…</h2>
+        <p id="detail">Keep this window open while the connection starts.</p>
+      </section>
+      <section id="tab" aria-label="Connected tab" hidden>
+        <strong id="tab-title"></strong>
+        <p id="tab-origin"></p>
+      </section>
+      <div id="actions">
+        <button id="disconnect" type="button">Cancel connection</button>
+      </div>
+    </main>
+    <script>
+      __RELAY_SCRIPT__
+    </script>
+  </body>
+</html>

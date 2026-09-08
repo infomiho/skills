@@ -1,6 +1,7 @@
 {
   "name": "infomiho-skills",
   "skills": [
+    "./skills/engineering/browser-bridge",
     "./skills/engineering/review",
     "./skills/productivity/source-to-article",
     "./skills/productivity/bro",
