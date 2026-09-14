@@ -3,6 +3,7 @@
   "skills": [
     "./skills/engineering/browser-bridge",
     "./skills/engineering/review",
+    "./skills/engineering/strict-review",
     "./skills/productivity/source-to-article",
     "./skills/productivity/bro",
     "./skills/productivity/create-presentation",

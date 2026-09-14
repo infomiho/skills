@@ -22,5 +22,6 @@ npx skills add infomiho/skills --skill scratch
 - `create-presentation` - Create a Preact + Vite + Shiki slide deck from an interview-driven outline.
 - `review` - Review code changes for correctness, clarity, and potential issues.
 - `rfc-discussion` - Turn an RFC's review comments into researched reply drafts, a local review tool, and a committed change list.
+- `strict-review` - Strict, first-principles PR review that questions the necessity of every change.
 - `scratch` - Work in scratch/prototype directories with the usual stack, process, and deployment preferences.
 - `ux-review` - Review websites, apps, UI code, screenshots, and product flows for usability issues.
