@@ -18,7 +18,10 @@ If a PR number is provided, fetch it with `gh pr diff $ARGUMENTS`. Otherwise, re
 2. DRY up the code.
 3. Check for Effective TypeScript issues.
 4. Remove AI slop comments.
-5. Run `shellcheck` on shell scripts.
+5. Check for overengineering: complex and fragile vs. simple and robust code.
+6. Check for redundant code, code that can be deleted.
+7. Drop trivial tests or tests that test library behavior.
+8. Run `shellcheck` on shell scripts.
 
 ## Output format
 
